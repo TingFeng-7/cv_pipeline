@@ -18,7 +18,7 @@ ASYNC_NORM = (
     nn.InstanceNorm1d,
     nn.InstanceNorm2d,
     nn.InstanceNorm3d,
-)
+) # * 元组
 
 __all__ = [
     "get_async_norm_states",
@@ -26,8 +26,8 @@ __all__ = [
     "tensor2pyobj",
     "all_reduce",
     "all_reduce_norm",
-]
-
+] # * 当前py的所有方法
+ 
 
 def get_async_norm_states(module):
     async_norm_states = OrderedDict()

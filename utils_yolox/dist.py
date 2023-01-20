@@ -37,9 +37,9 @@ __all__ = [
 
 _LOCAL_PROCESS_GROUP = None
 
-# 获取数目
+# * 获取数目
 def get_num_devices():
-    gpu_list = os.getenv('CUDA_VISIBLE_DEVICES', None) #去那所有东西
+    gpu_list = os.getenv('CUDA_VISIBLE_DEVICES', None) # * 去拿所有东西
     if gpu_list is not None:
         return len(gpu_list.split(','))
     else:

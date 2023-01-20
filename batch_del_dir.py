@@ -10,9 +10,9 @@ import shutil
 from loguru import logger
  
 target_paths = [r'D:\sa_data\exps\2022.9.30_yolox_1080p_sa_f27\Element_grabbing\grabbing_evaluation'] # 需要检索的一级 路径
-target_paths = [r'D:\sa_data\exps\20221108_yolox-nano-fpn4_nms_0.50']
+target_paths = [r'D:\sa_data\0001_sa_v1.5_iou0.85']
 
-dirNames = ['yolox_predict_debug'] # 指定目录名
+dirNames = ['evaluation'] # 指定目录名
  
  
 def delDir(sourcePath):

@@ -11,7 +11,8 @@ from loguru import logger
 paths = ['/workspace/bohuang/git_res/YOLOX/exps_pro/2022_8_9_base/elem_detect/f27/'] # 需要检索的一级 路径
 savePath = '/YOLOX/hbo_exps/' # 目标路径
 # 使用方式
-postfix = ['.jpg', '.JPG', '.PNG', '.png', '.jpeg', '.JPEG'] # 1.指定文件后缀名
+# postfix = ['.jpg', '.JPG', '.PNG', '.png', '.jpeg', '.JPEG'] # 1.指定文件后缀名
+postfix = ['.png']
 fileNames = ['exp.py'] # 2.指定文件名
  
 if not os.path.exists(savePath):
