@@ -13,8 +13,8 @@ def read_json_instance(abs_txt_name):
         ret_dic = json.load(f)
         return ret_dic
 
-def save_json_instance(content_path, save):
-    with open(content_path, 'w', encoding='utf-8') as f:
+def save_json_instance(save_name, save):
+    with open(save_name, 'w', encoding='utf-8') as f:
         # json.dump(save, f, ensure_ascii=False, indent=2)
         json.dump(save, f, ensure_ascii=False) #关掉indent省空间
 
@@ -22,8 +22,8 @@ def save_json_instance(content_path, save):
 def read_yaml_instance(name):
     return yaml.load(name)
 
-def save_yaml_instance(content_path, save):
-    with open(content_path, 'w') as file:
+def save_yaml_instance(save_name, save):
+    with open(save_name, 'w') as file:
         file.write(yaml.dump(save, allow_unicode=True))
 
 def dir_names(file_path):
