@@ -28,7 +28,7 @@ def caculate_wh_maxratio(w, h):
 def caculate_ratio(a, b):
     return a/b
 
-def coco_basic_info1(annFile):
+def coco_basic_info_plus(annFile):
     coco=COCO(annFile)
     # coco_val=COCO(val_annFile)
     ann_ids =coco.getAnnIds()
@@ -48,7 +48,7 @@ def coco_basic_info1(annFile):
     nms=[cat['name'] for cat in cats]
     print(f'COCO categories: {nms}')
     # print('COCO categories: \n{}\n'.format(' '.join(nms)))
-    min_det = 10 # id从1开始
+    min_det = 10 #  id从1开始
     # print(min_det)
     max_det = 10
     max_id = 1
@@ -140,21 +140,21 @@ if __name__ =='__main__':
     data_root= r'D:\sa_data\sa_coco_1' #coco根目录
     trainType='train'
 
-    # coco_basic_info1(annFile = r'D:\sa_other\nv10-coco\annotations\train_en.json')
+    # coco_basic_info_plus(annFile = r'D:\sa_other\nv10-coco\annotations\train_en.json')
     # print('-'*80)
-    # coco_basic_info1(annFile = r'D:\sa_other\nv10-coco\annotations\val_en.json')
+    # coco_basic_info_plus(annFile = r'D:\sa_other\nv10-coco\annotations\val_en.json')
 
 
     # #统计各个类别的gt数目是否平衡
-    # coco_basic_info1(annFile = r'D:\sa_other\dior\annotations\DIOR_train.json')
+    # coco_basic_info_plus(annFile = r'D:\sa_other\dior\annotations\DIOR_train.json')
     # print('-'*100)
-    # coco_basic_info1(annFile = r'D:\sa_other\dior\annotations\DIOR_val.json')
+    # coco_basic_info_plus(annFile = r'D:\sa_other\dior\annotations\DIOR_val.json')
 
     # print('-'*100)
     os.chdir(r'E:\visDrone2019')
-    coco_basic_info1(annFile = 'VisDrone2019-DET_train_coco.json')
+    coco_basic_info_plus(annFile = 'VisDrone2019-DET_train_coco.json')
     print('-'*100)
-    coco_basic_info1(annFile = 'VisDrone2019-DET_val_coco.json')
+    coco_basic_info_plus(annFile = 'VisDrone2019-DET_val_coco.json')
 
 
 

@@ -1,6 +1,7 @@
 import argparse
 import os.path as osp
-
+import sys
+sys.path.append(r'F:\A01_cyclone\02_github\cocoapi\PythonAPI')
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
@@ -8,8 +9,8 @@ from matplotlib.collections import PatchCollection
 from matplotlib.patches import Polygon
 from pycocotools.coco import COCO
 
-# ! 展示coco的gt
 
+# ! 展示coco的gt
 def show_coco_json(args):
     coco = COCO(osp.join(args.data_root, args.ann_file))
     print(f'Total number of images：{len(coco.getImgIds())}')
@@ -107,11 +108,11 @@ def parse_args():
     parser.add_argument(
         'data_root', default='data/coco/', help='data root path')
     parser.add_argument(
-        '--ann_file',
+        '-a','--ann_file',
         default='annotations/instances_train2017.json',
         help='ann file path')
     parser.add_argument(
-        '--img_dir', default='train2017', help='image folder path')
+        '-i','--img_dir', default='train2017', help='image folder path')
     parser.add_argument(
         '--wait-time', type=float, default=2, help='the interval of show (s)')
     parser.add_argument(
