@@ -9,6 +9,22 @@ train_type = 'train'
 val_type = 'val'
 test_type = 'test'
 
+# 待查表
+categories = [
+    {"id": 0, "name": "ignored regions"},
+    {"id": 1, "name": "pedestrian"},
+    {"id": 2, "name": "people"},
+    {"id": 3, "name": "bicycle"},
+    {"id": 4, "name": "car"},
+    {"id": 5, "name": "van"},
+    {"id": 6, "name": "truck"},
+    {"id": 7, "name": "tricycle"},
+    {"id": 8, "name": "awning-tricycle"},
+    {"id": 9, "name": "bus"},
+    {"id": 10, "name": "motor"},
+    {"id": 11, "name": "others"}
+]
+
 def convert_to_cocodetection_test(dir, output_dir, exist_test=False):
     #数据目录
     train_dir = os.path.join(dir, "test")
@@ -129,27 +145,19 @@ def convert_to_cocodetection(dir, output_dir, exist_test=False):
     train_images = os.path.join(train_dir, "images")
     val_images = os.path.join(val_dir, "images")
 
-    categories = [
-        {"id": 0, "name": "ignored regions"},
-        {"id": 1, "name": "pedestrian"},
-        {"id": 2, "name": "people"},
-        {"id": 3, "name": "bicycle"},
-        {"id": 4, "name": "car"},
-        {"id": 5, "name": "van"},
-        {"id": 6, "name": "truck"},
-        {"id": 7, "name": "tricycle"},
-        {"id": 8, "name": "awning-tricycle"},
-        {"id": 9, "name": "bus"},
-        {"id": 10, "name": "motor"},
-        {"id": 11, "name": "others"}
-    ]
+
     mode_list = ["train", "val"]
         ## start
     class_name=[]
     for x in categories:
         if x['name'] not in ['others','ignored regions']:
             class_name.append(x['name'])
-    categories_new = [ {'id':k, 'name':v} for k,v in enumerate(class_name)]
+    categories_new = [{'id':k, 'name':v} for k,v in enumerate(class_name)]
+    merge_class={'ped-people':['people','pedestrian'],
+                 'cycle-3':['bicycle', 'tricycle', 'awning-tricycle']}
+    i = 0
+    for k,v in enumerate(class_name):
+        if
     ## end
     anno_id_num = 0
     img_id_num = 0
@@ -195,7 +203,7 @@ def convert_to_cocodetection(dir, output_dir, exist_test=False):
                 if line.endswith(","):  # filter data
                     line = line.rstrip(",")
                 line_list = [int(i) for i in line.split(",")]
-                if int(line_list[5]) not in [0,11]: # 0和 11 不要
+                if int(line_list[5]) not in [0,11]: # 0 和 11 不要
                     bbox_xywh = [line_list[0], line_list[1], line_list[2], line_list[3]]
                     annotation["id"] = anno_id_num
                     annotation["image_id"] = img_id_num

@@ -2,7 +2,7 @@ import torch
 import sys
 import os 
 print(f'torch version: {torch.__version__}')
-print(f'torch cuda{torch.version.cuda}')
+print(f'torch cuda: {torch.version.cuda}')
 print(torch.backends.cudnn.version())
 
 print('*'*100)
@@ -15,3 +15,4 @@ WORLD_SIZE = int(os.getenv('WORLD_SIZE', 1))
 print(LOCAL_RANK)
 print(RANK)
 print(WORLD_SIZE)
+# mm收集环境的脚本可以参考一下

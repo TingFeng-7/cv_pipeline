@@ -22,7 +22,7 @@ def coco_basic_info(data_root, dataType):
     imgInfo = coco.imgs
     logger.info(f'图片共有{len(img_ids)} 张, gt共有{len(ann_ids)}个')
 
-def caculate_wh_maxratio(w, h):
+def caculate_wh_maxratio(w, h): #最大长宽比
     return max(w/h, h/w)
 
 def caculate_ratio(a, b):
@@ -36,54 +36,54 @@ def coco_basic_info_plus(annFile):
     cat_ids = coco.getCatIds()
     img2Ann = coco.imgToAnns
     imgInfo = coco.imgs
-    print(f'图片共有{len(img_ids)} 张, gt共有{len(ann_ids)}个,平均一张图片有 {len(ann_ids)/len(img_ids)} 个gt')
+    print(f'图片共有{len(img_ids)} 张, \ngt共有{len(ann_ids)}个\nper image have {len(ann_ids)/len(img_ids)} 个gt')
     sum=0
     # 每张图片的长宽比
     for v in imgInfo.items():
         #{1: {'file_name': '00001.jpg', 'height': 800, 'width': 800, 'id': 1} }
         ratio = v[1]['height'] / v[1]['width']
         sum+=ratio
-    print(f'average of images size: {sum/len(imgInfo)}')
+    print(f'average 长宽比 of images : {sum/len(imgInfo)}')
     cats = coco.loadCats(coco.getCatIds())
     nms=[cat['name'] for cat in cats]
-    print(f'COCO categories: {nms}')
+    print(f'COCO categories: {nms} totally {len(nms)}')
     # print('COCO categories: \n{}\n'.format(' '.join(nms)))
-    min_det = 10 #  id从1开始
+    min_det = 100 #  id从1开始
     # print(min_det)
     max_det = 10
     max_id = 1
     for i in img_ids:
-        cur_dt = coco.getAnnIds(imgIds=[i])
-        min_det = min(min_det, len(cur_dt))
-        max_id = i if len(cur_dt) > max_det else max_id
-        max_det = max(max_det, len(cur_dt))
+        cur_det = coco.getAnnIds(imgIds=[i])
+        min_det = min(min_det, len(cur_det))
+        max_id = i if len(cur_det) > max_det else max_id
+        max_det = max(max_det, len(cur_det)) #当前最大框
     bbox_ratios_dicts = {}
 
     for i in cat_ids: #按照类别统计 robust
         anns_id = coco.getAnnIds(catIds=i) #获取id
         anns_dict = coco.loadAnns(ids = anns_id)
-        # anns = coco.getAnnIds(catIds=i+1)
         cur_cls_name = nms[i]
         print('*'*100)
         print(f'{cur_cls_name} : {len(anns_id)}')
-
         # 统计长宽比
         bbox_ratios_dicts[cur_cls_name+'_bbox_ratio'] = []
-        w_div_h_ratio =[]
-        h_div_w_ratio =[]
         ratio1 = []
         abs_ratio=[]
         for ann in anns_dict:
             bbox, area = ann['bbox'], ann['area']
-            if(bbox[3]>bbox[2]): # h > w
-                h_div_w_ratio.append(caculate_ratio(bbox[3], bbox[2]))
-            else: # w>h
-                w_div_h_ratio.append(caculate_ratio(bbox[2], bbox[3]))
-            ratio1.append(caculate_wh_maxratio(bbox[3], bbox[2]))
-            abs_ratio.append(caculate_ratio(bbox[2], bbox[3]))
+            w,h = bbox[2],bbox[3]
+            if w==0 or h==0: continue
+            # 1. h > w
+            # if(bbox[3]>bbox[2]): 
+            #     h_div_w_ratio.append(caculate_ratio(bbox[3], bbox[2]))
+            # # 2. w > h
+            # else: 
+            #     w_div_h_ratio.append(caculate_ratio(bbox[2], bbox[3]))
+            # ratio1.append(caculate_wh_maxratio(bbox[3], bbox[2]))
+            ratio1.append(caculate_ratio(bbox[2], bbox[3]))
 
-        print('1. max_ratio')
-        save_wh_ratio(ratio1, cur_cls_name+'_ratio1.csv')
+        # print('1. max_ratio')
+        # save_wh_ratio(ratio1, cur_cls_name+'_ratio1.csv')
         # print('>'*100)
         # print('2. height / width')
         # save_wh_ratio(h_div_w_ratio, cur_cls_name+'_ratio2.csv')
@@ -137,8 +137,7 @@ def save_to_csv_ncols(arry, csvname, parms, percent_nums):
     csv_file.close()
 
 if __name__ =='__main__':
-    data_root= r'D:\sa_data\sa_coco_1' #coco根目录
-    trainType='train'
+    data_root= '/data/visDrone20191/visdrone2019-yolo' #coco根目录
 
     # coco_basic_info_plus(annFile = r'D:\sa_other\nv10-coco\annotations\train_en.json')
     # print('-'*80)
@@ -151,11 +150,11 @@ if __name__ =='__main__':
     # coco_basic_info_plus(annFile = r'D:\sa_other\dior\annotations\DIOR_val.json')
 
     # print('-'*100)
-    os.chdir(r'E:\visDrone2019')
-    coco_basic_info_plus(annFile = 'VisDrone2019-DET_train_coco.json')
+    # os.chdir(r'E:\visDrone2019')
+    from os.path import join as opj
+    coco_basic_info_plus(annFile = opj(data_root,'train.json'))
     print('-'*100)
-    coco_basic_info_plus(annFile = 'VisDrone2019-DET_val_coco.json')
-
+    coco_basic_info_plus(annFile = opj(data_root,'val.json'))
 
 
 
