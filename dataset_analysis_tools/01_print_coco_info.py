@@ -2,7 +2,6 @@
 # sys.path.append(r'E:\A01_cyclone\02_github\py_script\cocoapi\PythonAPI')
 from pycocotools.coco import COCO
 import numpy as np
-import skimage.io as io
 from loguru import logger
 import os
 import numpy as np
@@ -36,17 +35,17 @@ def coco_basic_info_plus(annFile):
     cat_ids = coco.getCatIds()
     img2Ann = coco.imgToAnns
     imgInfo = coco.imgs
-    print(f'图片共有{len(img_ids)} 张, \ngt共有{len(ann_ids)}个\nper image have {len(ann_ids)/len(img_ids)} 个gt')
+    print(f'图片共有{len(img_ids)} 张, GT共有{len(ann_ids)}个, 平均一张图片有{len(ann_ids)/len(img_ids)}个gt')
     sum=0
     # 每张图片的长宽比
     for v in imgInfo.items():
         #{1: {'file_name': '00001.jpg', 'height': 800, 'width': 800, 'id': 1} }
         ratio = v[1]['height'] / v[1]['width']
         sum+=ratio
-    print(f'average 长宽比 of images : {sum/len(imgInfo)}')
+    print(f'图片的平均长宽比 of images : {sum/len(imgInfo)}')
     cats = coco.loadCats(coco.getCatIds())
     nms=[cat['name'] for cat in cats]
-    print(f'COCO categories: {nms} totally {len(nms)}')
+    print(f'COCO 有 totally {len(nms)}类， categories: {nms} ')
     # print('COCO categories: \n{}\n'.format(' '.join(nms)))
     min_det = 100 #  id从1开始
     # print(min_det)
@@ -58,7 +57,9 @@ def coco_basic_info_plus(annFile):
         max_id = i if len(cur_det) > max_det else max_id
         max_det = max(max_det, len(cur_det)) #当前最大框
     bbox_ratios_dicts = {}
-
+    total_h=0
+    total_w=0
+    step=0
     for i in cat_ids: #按照类别统计 robust
         anns_id = coco.getAnnIds(catIds=i) #获取id
         anns_dict = coco.loadAnns(ids = anns_id)
@@ -81,6 +82,9 @@ def coco_basic_info_plus(annFile):
             #     w_div_h_ratio.append(caculate_ratio(bbox[2], bbox[3]))
             # ratio1.append(caculate_wh_maxratio(bbox[3], bbox[2]))
             ratio1.append(caculate_ratio(bbox[2], bbox[3]))
+            total_h += bbox[2]
+            total_w += bbox[3]
+            step += 1
 
         # print('1. max_ratio')
         # save_wh_ratio(ratio1, cur_cls_name+'_ratio1.csv')
@@ -93,9 +97,10 @@ def coco_basic_info_plus(annFile):
         # print('<'*100)
         # print('4. w / h')
         # save_wh_ratio(abs_ratio,cur_cls_name+'_ratio4.csv')
-    
+    print(f'Bbox nums: {step}')
+    print(f'Average: Height: {total_h/step} Width: {total_w/step}')
     print(f'min det: {min_det} max det: {max_det}')
-    print(f'max id : {max_id} \n the maxdets Imginfo: {imgInfo[max_id]}')
+    print(f'max id : {max_id} \nthe maxdets Imginfo: {imgInfo[max_id]}')
 
 def save_wh_ratio(arry, csvname):
     arry = np.array(arry)
@@ -142,7 +147,6 @@ if __name__ =='__main__':
     # coco_basic_info_plus(annFile = r'D:\sa_other\nv10-coco\annotations\train_en.json')
     # print('-'*80)
     # coco_basic_info_plus(annFile = r'D:\sa_other\nv10-coco\annotations\val_en.json')
-
 
     # #统计各个类别的gt数目是否平衡
     # coco_basic_info_plus(annFile = r'D:\sa_other\dior\annotations\DIOR_train.json')
